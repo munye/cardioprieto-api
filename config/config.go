@@ -18,6 +18,12 @@ type Config struct {
 // initialize will read environment variables and save them in config structure fields
 func (config *Config) initialize() {
 	// read environment variables
+	os.Setenv("server_host", ":1234")
+	os.Setenv("mongo_user", "root")
+	os.Setenv("mongo_password", "example")
+	os.Setenv("mongo_host", "localhost")
+	os.Setenv("mongo_port", "27017")
+
 	config.ServerHost = os.Getenv("server_host")
 	config.MongoUser = os.Getenv("mongo_user")
 	config.MongoPassword = os.Getenv("mongo_password")

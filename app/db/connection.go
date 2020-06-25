@@ -4,9 +4,9 @@ import (
 	"log"
 	"time"
 
+	"context"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"golang.org/x/net/context"
 )
 
 // InitialConnection will create new connection to mongo db

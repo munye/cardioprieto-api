@@ -31,7 +31,7 @@ func ConfigAndRunApp(config *config.Config) {
 
 // Initialize initialize the app with
 func (app *App) Initialize(config *config.Config) {
-	app.DB = db.InitialConnection("golang", config.MongoURI())
+	app.DB = db.InitialConnection("cardioprieto", config.MongoURI())
 	app.createIndexes()
 
 	app.Router = mux.NewRouter()
@@ -41,12 +41,12 @@ func (app *App) Initialize(config *config.Config) {
 
 // SetupRouters will register routes in router
 func (app *App) setRouters() {
-	app.Post("/person", app.handleRequest(handler.CreatePerson))
-	app.Patch("/person/{id}", app.handleRequest(handler.UpdatePerson))
-	app.Put("/person/{id}", app.handleRequest(handler.UpdatePerson))
-	app.Get("/person/{id}", app.handleRequest(handler.GetPerson))
-	app.Get("/person", app.handleRequest(handler.GetPersons))
-	app.Get("/person", app.handleRequest(handler.GetPersons), "page", "{page}")
+	app.Post("/paciente", app.handleRequest(handler.CreatePaciente))
+	app.Patch("/paciente/{id}", app.handleRequest(handler.UpdatePaciente))
+	app.Put("/paciente/{id}", app.handleRequest(handler.UpdatePaciente))
+	app.Get("/paciente/{id}", app.handleRequest(handler.GetPaciente))
+	app.Get("/paciente", app.handleRequest(handler.GetPacientes))
+	app.Get("/paciente", app.handleRequest(handler.GetPacientes), "page", "{page}")
 }
 
 // UseMiddleware will add global middleware in router
@@ -58,11 +58,11 @@ func (app *App) UseMiddleware(middleware mux.MiddlewareFunc) {
 func (app *App) createIndexes() {
 	// username and email will be unique.
 	keys := bsonx.Doc{
-		{Key: "username", Value: bsonx.Int32(1)},
-		{Key: "email", Value: bsonx.Int32(1)},
+		{Key: "name", Value: bsonx.Int32(1)},
+		{Key: "surname", Value: bsonx.Int32(1)},
 	}
-	people := app.DB.Collection("people")
-	db.SetIndexes(people, keys)
+	paciente := app.DB.Collection("pacientes")
+	db.SetIndexes(paciente, keys)
 }
 
 // Get will register Get method for an endpoint
