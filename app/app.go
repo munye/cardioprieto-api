@@ -8,9 +8,9 @@ import (
 	"syscall"
 
 	"github.com/gorilla/mux"
-	"github.com/katoozi/golang-mongodb-rest-api/app/db"
-	"github.com/katoozi/golang-mongodb-rest-api/app/handler"
-	"github.com/katoozi/golang-mongodb-rest-api/config"
+	"github.com/munye/cardioprieto-api/app/db"
+	"github.com/munye/cardioprieto-api/app/handler"
+	"github.com/munye/cardioprieto-api/config"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/x/bsonx"
 	"golang.org/x/net/context"
@@ -58,8 +58,9 @@ func (app *App) UseMiddleware(middleware mux.MiddlewareFunc) {
 func (app *App) createIndexes() {
 	// username and email will be unique.
 	keys := bsonx.Doc{
-		{Key: "name", Value: bsonx.Int32(1)},
-		{Key: "surname", Value: bsonx.Int32(1)},
+		{Key: "nombre", Value: bsonx.Int32(1)},
+		{Key: "apellido", Value: bsonx.Int32(1)},
+		{Key: "identificacion", Value: bsonx.Int32(1)},
 	}
 	paciente := app.DB.Collection("pacientes")
 	db.SetIndexes(paciente, keys)

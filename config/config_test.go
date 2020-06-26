@@ -11,16 +11,16 @@ const failed = "\u2717"
 
 func TestConfig(t *testing.T) {
 	os.Setenv("server_host", ":1234")
-	os.Setenv("mongo_user", "john")
-	os.Setenv("mongo_password", "doe")
+	os.Setenv("mongo_user", "root")
+	os.Setenv("mongo_password", "example")
 	os.Setenv("mongo_host", "localhost")
 	os.Setenv("mongo_port", "27017")
 
 	config := NewConfig()
 
 	mongoURI := fmt.Sprintf("mongodb://%s:%s@%s:%s",
-		"john",
-		"doe",
+		"root",
+		"example",
 		"localhost",
 		"27017",
 	)

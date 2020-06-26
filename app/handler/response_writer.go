@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/katoozi/golang-mongodb-rest-api/app/model"
+	"github.com/munye/cardioprieto-api/app/model"
 )
 
 // ResponseWriter will write result in http.ResponseWriter

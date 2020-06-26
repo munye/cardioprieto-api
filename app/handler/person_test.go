@@ -8,9 +8,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/katoozi/golang-mongodb-rest-api/app/db"
-	"github.com/katoozi/golang-mongodb-rest-api/app/model"
-	"github.com/katoozi/golang-mongodb-rest-api/config"
+	"github.com/munye/cardioprieto-api/app/db"
+	"github.com/munye/cardioprieto-api/app/model"
+	"github.com/munye/cardioprieto-api/config"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/x/bsonx"
 )
@@ -25,21 +25,21 @@ func handleRequest(db *mongo.Database, handler func(db *mongo.Database, w http.R
 }
 
 func createNewRequestNewRecorder(method, endpoint string, body io.Reader) (*http.Request, *httptest.ResponseRecorder) {
-	req, _ := http.NewRequest("POST", "/person", body)
+	req, _ := http.NewRequest("POST", "/paciente", body)
 	rr := httptest.NewRecorder()
 	return req, rr
 }
 
-func TestCreatePerson(t *testing.T) {
+func TestCreatePaciente(t *testing.T) {
 	configuration := config.NewConfig()
 	dbConnection := db.InitialConnection("test", configuration.MongoURI())
 
-	person, _ := json.Marshal(model.NewPerson("john", "doe", "john_doe", "john@gmail.com", nil))
+	paciente, _ := json.Marshal(model.NewPaciente("john", "doe", "john_doe", "john@gmail.com", nil))
 
-	httpHandler := http.HandlerFunc(handleRequest(dbConnection, CreatePerson))
+	httpHandler := http.HandlerFunc(handleRequest(dbConnection, CreatePaciente))
 
 	// check http created status
-	req, rr := createNewRequestNewRecorder("POST", "/person", bytes.NewBuffer(person))
+	req, rr := createNewRequestNewRecorder("POST", "/paciente", bytes.NewBuffer(paciente))
 	httpHandler.ServeHTTP(rr, req)
 	if status := rr.Code; status != http.StatusCreated {
 		t.Errorf("%s check StatusCreated is failed: got %d want %d", failed, status, http.StatusCreated)
@@ -48,7 +48,7 @@ func TestCreatePerson(t *testing.T) {
 	}
 
 	// check http bad request status
-	req, rr = createNewRequestNewRecorder("POST", "/person", bytes.NewBuffer([]byte("{'username': 'download'email:'john@gmail.com'}"))) // wrong json body
+	req, rr = createNewRequestNewRecorder("POST", "/paciente", bytes.NewBuffer([]byte("{'username': 'download'email:'john@gmail.com'}"))) // wrong json body
 	httpHandler.ServeHTTP(rr, req)
 	if status := rr.Code; status != http.StatusBadRequest {
 		t.Errorf("%s check StatusBadRequest return wrong status code: got %d want %d", failed, status, http.StatusBadRequest)
@@ -66,7 +66,7 @@ func TestCreatePerson(t *testing.T) {
 	people := dbConnection.Collection("people")
 	db.SetIndexes(people, keys)
 
-	req, rr = createNewRequestNewRecorder("POST", "/person", bytes.NewBuffer(person))
+	req, rr = createNewRequestNewRecorder("POST", "/paciente", bytes.NewBuffer(paciente))
 	httpHandler.ServeHTTP(rr, req)
 	if status := rr.Code; status != http.StatusNotAcceptable {
 		t.Errorf("%s check StatusNotAcceptable return wrong status code: got %d want %d", failed, status, http.StatusNotAcceptable)
@@ -78,7 +78,7 @@ func TestCreatePerson(t *testing.T) {
 	// drop database and close connection for raise internal server error
 	dbConnection.Drop(nil)
 	dbConnection.Client().Disconnect(nil)
-	req, _ = http.NewRequest("POST", "/person", bytes.NewBuffer(person))
+	req, _ = http.NewRequest("POST", "/paciente", bytes.NewBuffer(paciente))
 	rr = httptest.NewRecorder()
 	httpHandler.ServeHTTP(rr, req)
 	if status := rr.Code; status != http.StatusInternalServerError {

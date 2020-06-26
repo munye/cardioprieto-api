@@ -1,4 +1,4 @@
-module github.com/katoozi/golang-mongodb-rest-api
+module github.com/munye/cardioprieto-api
 
 go 1.14
 
